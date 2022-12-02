@@ -19,6 +19,8 @@
   [& args]
   ; Slurp in the input file  
   (let [fn (first args)
-        input (str/split (slurp fn) #"\n")]
-    (println "Running on file" fn)
-    (println (str "Most loaded elf has" (apply max (map #(reduce + %) (group "" input))) " calories"))))
+        input (str/split (slurp fn) #"\n")
+        bags (map #(reduce + %) (group "" input))]
+    (println "Running on file" fn) 
+    (println "Most loaded elf has" (apply max bags) "calories") 
+    (println "Three most loaded elves have" (reduce + (take 3 (sort > bags))) "calories")))
