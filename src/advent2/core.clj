@@ -41,7 +41,7 @@
   (let [their-play (- (int (get play 0)) 65)
         my-play (- (int (get play 2)) 88)
         score (point-calculator their-play my-play)] 
-    (println "Play was" play ", score was" score)
+    ;(println "Play was" play ", score was" score)
     score))
 
 ;; Now just sum it all up for the whole input.
