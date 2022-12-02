@@ -1,6 +1,6 @@
 (ns advent1.core
-  (:gen-class))
-(require '[clojure.string :as str])
+  (:gen-class)
+  (:require [clojure.string :as str]))
 
 (defn group
   "Split a sequence into multiple sequences by a delimiter, eating the delimiter"
@@ -17,7 +17,8 @@
 (defn -main
   "Calorie counting"
   [& args]
-  ; Slurp in the input file
-  (println (str "Running on file " (first *command-line-args*)))
-  (def input (str/split (slurp (first *command-line-args*)) #"\n"))
-  (println (str "Most loaded elf has " (apply max (map #(reduce + %) (group "" input))) " calories")))
+  ; Slurp in the input file  
+  (let [fn (first args)
+        input (str/split (slurp fn) #"\n")]
+    (println "Running on file" fn)
+    (println (str "Most loaded elf has" (apply max (map #(reduce + %) (group "" input))) " calories"))))
