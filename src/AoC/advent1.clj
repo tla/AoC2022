@@ -1,5 +1,4 @@
-(ns advent1.core
-  (:gen-class)
+(ns AoC.advent1 
   (:require [clojure.string :as str]))
 
 (defn group
@@ -14,7 +13,7 @@
         ; Add this item to the end of the first list in collected
         (recur delim (rest items) (conj (rest collected) (conj (first collected) (Integer. (first items)))))))))
 
-(defn -main
+(defn solve
   "Calorie counting"
   [& args]
   ; Slurp in the input file  

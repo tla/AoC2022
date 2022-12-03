@@ -1,5 +1,4 @@
-(ns advent2.core
-  (:gen-class)
+(ns AoC.advent2
   (:require [clojure.string :as str]))
 
 ;; I wanted to do this one without making a boring map like
@@ -46,7 +45,7 @@
 
 ;; Now just sum it all up for the whole input.
 
-(defn -main
+(defn solve
   "Card counting"
   [& args] 
   (println "Running on file" (first args))
