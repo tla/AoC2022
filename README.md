@@ -7,6 +7,7 @@ Letting the world watch as I bumble my way through Clojure
 * Day 1: figured out how to run anything at all
 * Day 2: got the hang of `let` in order to not need `def` all the time
 * Day 3: started to figure out namespaces, made runner
+* Day 4: trying to minimise use of `let`; trying to figure out Calva in VS Code.
 
 ## If you want
 
