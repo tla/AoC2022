@@ -51,6 +51,7 @@
          (recur remaining bag)
          (recur remaining (set/intersection bag common)))))))
 
+#_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn solve
   "Priority counting"
   [& args]

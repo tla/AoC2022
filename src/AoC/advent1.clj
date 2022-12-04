@@ -13,6 +13,7 @@
         ; Add this item to the end of the first list in collected
         (recur delim (rest items) (conj (rest collected) (conj (first collected) (Integer. (first items)))))))))
 
+#_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn solve
   "Calorie counting"
   [& args]

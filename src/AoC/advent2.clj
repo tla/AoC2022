@@ -45,6 +45,7 @@
 
 ;; Now just sum it all up for the whole input.
 
+#_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn solve
   "Card counting"
   [& args] 
