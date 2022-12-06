@@ -5,45 +5,66 @@
 ;; crates will be a linked list, and the stacks will be items in a vector.
 
 (defn add-to-stack
-  ;; Until I figure out how to flatten a vector into an argument list...
-  ([[cratestacks item] idx] (add-to-stack cratestacks item idx))
   ;; Given a vector of lists, return the same vector of lists
   ;; with `item` pushed onto the list at index i.
-  ([cratestacks item idx]
-   (vec (map #(if (and item (= % idx))
-                (cons item (get cratestacks %))
-                (get cratestacks %))
-             (range (count cratestacks)))))
+  [cratestacks item idx]
+  (vec (map #(if (and item (= % idx))
+               (cons item (get cratestacks %))
+               (get cratestacks %))
+             (range (count cratestacks))))
+  )
+
+(defn addn-to-stack
+  ;; Given a set of crate stacks, return the set with the given items added to the
+  ;; stack with index i.
+  [cratestacks itemlist idx]
+  (vec (map #(if (= % idx)
+               (flatten (cons itemlist (get cratestacks %)))
+               (get cratestacks %))
+            (range (count cratestacks))))
   )
 
 (defn remove-from-stack
-  ;; Given a stack of crates, return a vector consisting of the stack of crates
-  ;; with the item removed, and the item that was removed.
+  ;; Given a set of crate stacks, return the set with the given item removed from the given stack.
   [cratestacks idx]
-  [(vec (map #(if (= % idx)
+  (vec (map #(if (= % idx)
                 (rest (get cratestacks %))
                 (get cratestacks %))
              (range (count cratestacks))))
-   (first (get cratestacks idx))]
   )
+
+(defn removen-from-stack
+  [cratestacks n idx]
+  (vec (map #(if (= % idx)
+               (drop n (get cratestacks %))
+               (get cratestacks %))
+            (range (count cratestacks)))))
+
+(defn parse-order
+  "Parse the move order, decrementing the origin and target for array indexing"
+  [order]
+  (let [parsed (map #(Integer/parseInt %) (subvec (re-matches #"move (\d+) from (\d+) to (\d+)" order) 1))]
+    [(first parsed) (dec (second parsed)) (dec (last parsed))]))
 
 ;; Then we have to carry out orders like 'move 2 from 1 to 5'. We are given the order spec and the
 ;; existing set of stacks, and we need to return the reordered set of stacks.
 (defn move-crates
   "Given a move order, rearrange the given crates in the stacks."
   [order, cratestacks]
-  ;; I tried to do the following with a destructure but it just set all the variables to nil.
-  (let [l (map #(Integer/parseInt %) (subvec (re-matches #"move (\d+) from (\d+) to (\d+)" order) 1))
-        n (first l)
-        origin (- (first (rest l)) 1)
-        target (- (first (drop 2 l)) 1)]
+  (let [[n origin target] (parse-order order)]
     (loop [x 0
            cs cratestacks]
       (if (= x n)
         cs
-        (recur (inc x) (add-to-stack (remove-from-stack cs origin) target))))
-    )
+        (recur (inc x) (add-to-stack (remove-from-stack cs origin) (first (get cs origin)) target) ))))
   )
+
+(defn moven-crates
+  "Given a move order, rearrange the given crates in the stacks as one unit."
+  [order cratestacks]
+  (let [[n origin target] (parse-order order)]
+    ;; (println "Cratestacks before move are" cratestacks)
+    (addn-to-stack (removen-from-stack cratestacks n origin) (take n (get cratestacks origin)) target)))
 
 (defn stack-crates
   [crates cratestacks]
@@ -81,19 +102,19 @@
   )
 
 (defn process-input
-  [input]
+  [input movefunc]
   (loop [divider false
          cratespec []
          line (first input)
          following (rest input)]
     (if (empty? following)
-      (move-crates line cratespec)
+      (movefunc line cratespec)
       (if (= line "")
         ;; If we reach the divider line, set up the crates and pass it to the future iterations of this loop.
         (recur true (init-crates cratespec) (first following) (rest following))
         ;; Depending on whether we are before or after the divider line, act appropriately
         (if divider (                                       ;; We are processing move instructions
-                      recur divider (move-crates line cratespec) (first following) (rest following))
+                      recur divider (movefunc line cratespec) (first following) (rest following))
                     (                                       ;; We are building up the crate specification
                       recur divider (cons line cratespec) (first following) (rest following)))))))
 
@@ -107,12 +128,9 @@
 (defn solve
   "Overlap counting"
   [& args]
-  (let [fname "resources/advent5/example.txt"
+  (let [fname (first args)
         input (str/split (slurp fname) #"\n")]
     ;; We need to read lines from the input until we hit the blank line
-    (println "Accessible crates are " (crate-tops (process-input input)))
-    (println "Whatever next??")
+    (println "Accessible crates are" (crate-tops (process-input input move-crates)))
+    (println "Accessible crates afterward are" (crate-tops (process-input input moven-crates)))
     ))
-
-(def input (str/split (slurp "/Users/tla/Projects/AoC2022/resources/advent5/input.txt") #"\n"))
-(println (crate-tops (process-input input)))
