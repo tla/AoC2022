@@ -11,7 +11,7 @@ Letting the world watch as I bumble my way through Clojure
 * Day 5: drowning in state manipulation using immutable objects. DROWNING. Also, banging my head against lazy-eval lists
 * Day 6: a proper holiday after day 5. Tried out exception handling, for giggles
 * Day 7: Holiday over!! The `clojure.zip` library has a pretty large learning curve ("next" is the same as "down" when you are starting? They could have mentioned that? *sigh*)
-
+* Day 8: Straightforward grids. I would really like a way to refactor / simplify the collection of a bunch of derived values from a data structure I have to pass to multiple functions.
 
 ## If you want
 
