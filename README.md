@@ -10,6 +10,8 @@ Letting the world watch as I bumble my way through Clojure
 * Day 4: trying to minimise use of `let`; trying to figure out Calva in VS Code.
 * Day 5: drowning in state manipulation using immutable objects. DROWNING. Also, banging my head against lazy-eval lists
 * Day 6: a proper holiday after day 5. Tried out exception handling, for giggles
+* Day 7: Holiday over!! The `clojure.zip` library has a pretty large learning curve ("next" is the same as "down" when you are starting? They could have mentioned that? *sigh*)
+
 
 ## If you want
 

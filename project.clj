@@ -1,4 +1,4 @@
-(defproject AoC "0.1.0-SNAPSHOT"
+(defproject AoC "2022.07"
   :description "Advent of Code solutions // learning Clojure"
   :url "http://eccentricity.org/"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"

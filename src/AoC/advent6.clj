@@ -18,7 +18,6 @@
   [& args]
   (let [fname (first args)
         input (str/split (slurp fname) #"\n")]
-    ;; We need to read lines from the input until we hit the blank line
     (println "Start-of-packet markers found at" (map #(find-packet % 4) input))
     (println "Message markers found at" (map #(find-packet % 14) input))
     ))
