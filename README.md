@@ -14,6 +14,7 @@ Letting the world watch as I bumble my way through Clojure
 * Day 8: Straightforward grids. I would really like a way to refactor / simplify the collection of a bunch of derived values from a data structure I have to pass to multiple functions.
 * Day 9: The joys of seemingly unambiguous instructions that become very ambiguous once the initial assumption is violated (in this case, that a head knot will only be moving in one dimension.) Try as I might, I can't get the right answer for part 2, and I found my first (wrong for the puzzle) rope-move algorithm more aesthetically pleasing.
 * Day 10: Signal processing, nothing too hard, abusing zero-indexing for my own fun and profit.
+* Day 11: trying to do with Clojure what was really obviously intended for an object oriented system. First real use of hashmaps, in the process.
 
 ## If you want
 
