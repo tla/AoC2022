@@ -103,5 +103,10 @@
         start (get-nodestr terrain (find-char terrain \S))
         end (get-nodestr terrain (find-char terrain \E))]
     ; (uber/pprint g)
-    (println "First solution is" (alg/shortest-path g start end))
+    (println "Shortest path between S and E is" (alg/cost-of-path (alg/shortest-path g start end)) "steps")
+    (println "Shortest path between A and E is" 
+             (alg/cost-of-path
+              (alg/shortest-path g {:start-nodes (filter #(str/starts-with? % "a/") (uber/nodes g))
+                                    :end-node end}))
+             "steps")
   ))
