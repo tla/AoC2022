@@ -18,10 +18,14 @@
       (reverse (cons (make-pair first-def) pairs))
       (recur (cons (make-pair first-def) pairs) (vec (take 2 rest-def)) (drop 3 rest-def))))) 
 
+(defn get-all-packets
+  [input]
+  (map json/read-str (filter #(not (str/blank? %)) input)))
+
 (defn cmp-array
   "Return a cmp-like value (0, negative, or positive) to compare the left 
    array to the right one. Recurse into sub-arrays as needed."
-  [[aleft aright]]
+  [aleft aright]
   (loop [ileft (first aleft)
          iright (first aright)
          rleft (rest aleft)
@@ -31,17 +35,17 @@
     (cond
       (not (= 0 outcome)) outcome
       (and (= nil ileft) (= nil iright)) 0
-      (= nil ileft) 1
-      (= nil iright) -1
+      (= nil ileft) -1
+      (= nil iright) 1
       (and (vector? ileft) (vector? iright))
-      (recur (first rleft) (first rright) (rest rleft) (rest rright) (cmp-array [ileft iright]))
+      (recur (first rleft) (first rright) (rest rleft) (rest rright) (cmp-array ileft iright))
       (vector? ileft)
-      (recur (first rleft) (first rright) (rest rleft) (rest rright) (cmp-array [ileft [iright]]))
+      (recur (first rleft) (first rright) (rest rleft) (rest rright) (cmp-array ileft [iright]))
       (vector? iright)
-      (recur (first rleft) (first rright) (rest rleft) (rest rright) (cmp-array [[ileft] iright]))
+      (recur (first rleft) (first rright) (rest rleft) (rest rright) (cmp-array [ileft] iright))
       (= ileft iright) 
       (recur (first rleft) (first rright) (rest rleft) (rest rright) 0)
-      :else (- iright ileft))))
+      :else (- ileft iright))))
   
 
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
@@ -50,16 +54,21 @@
   [& args]
   (let [fname (first args)
         input (str/split (slurp fname) #"\n")
-        pairs (get-pairs input)]
+        pairs (get-pairs input)
+        allpackets (into (get-all-packets input) '([[2]] [[6]]))]
     (println "Sum of indices of ordered pairs is"
              (loop [i 1
                     ordered-indices '()
                     f (first pairs)
-                    r (rest pairs)] 
+                    r (rest pairs)]
                (if (not f)
                  (reduce + ordered-indices)
-                 (do (println "Answer for pair" i "is" (cmp-array f))
-                   (recur (inc i) 
-                        (if (<= 0 (cmp-array f)) (cons i ordered-indices) ordered-indices)
-                        (first r)
-                        (rest r))))))))
+                 (recur (inc i)
+                            (if (< (cmp-array (first f) (second f)) 0) (cons i ordered-indices) ordered-indices)
+                            (first r)
+                            (rest r)))))
+    (println "Decoder key is"
+             (let [sorted-packets (map vector (range) (sort cmp-array allpackets))
+                   index2 (first (first (filter #(= (second %) [[2]]) sorted-packets)))
+                   index6 (first (first (filter #(= (second %) [[6]]) sorted-packets)))]
+               (* (inc index2) (inc index6))))))
