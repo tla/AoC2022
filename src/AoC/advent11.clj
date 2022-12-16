@@ -15,7 +15,7 @@
 
 (defn monkey-handoff
   [monkeylist item from to]
-  (println "Monkey" from "handing off item" item "to monkey" to)
+  ; (println "Monkey" from "handing off item" item "to monkey" to)
   (map
    (fn [x] (if (= from (:id x))
              (update (update x :held #(vec (rest %))) :inspected inc)
@@ -30,13 +30,15 @@
   [monkeylist monkey] 
   (let [item (first (:held monkey))
         testop (:test monkey)
-        opop (:op monkey)]
+        opop (:op monkey)
+        supermod (reduce * (map :test monkeylist))]
     (if item 
       ;; For the first answer we divided (opop item) by 3. 
-      (let [inspected (long (/ (opop item) 3))]
-        (if (testop inspected)
-          (monkey-handoff monkeylist inspected (:id monkey) (:true-to monkey))
-          (monkey-handoff monkeylist inspected (:id monkey) (:false-to monkey))))
+      (let [inspected (long (opop item))
+            handoff (mod inspected supermod)]
+        (if (= 0 (mod inspected testop))
+          (monkey-handoff monkeylist handoff (:id monkey) (:true-to monkey))
+          (monkey-handoff monkeylist handoff (:id monkey) (:false-to monkey))))
       monkeylist  ;; The monkey has nothing to throw and its turn ends
       )))
 
@@ -74,7 +76,7 @@
      :held (json/read-str items)
      :inspected 0
      :op oper
-     :test #(= 0 (mod % testmod))
+     :test testmod
      :true-to iftrue
      :false-to iffalse})
   )
@@ -111,7 +113,7 @@
   [& args]
   (let [fname (first args)
         input (str/split (slurp fname) #"\n")
-        rounds 20
+        rounds 10000
         monkeylist (monkeylist-init input)
         finalml (map :inspected
                      (loop [n 0
