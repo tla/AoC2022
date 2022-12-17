@@ -17,6 +17,7 @@ Letting the world watch as I bumble my way through Clojure
 * Day 11: trying to do with Clojure what was really obviously intended for an object oriented system. First real use of hashmaps, in the process.
 * Day 12: a pathfinding problem. The keywords "shortest path" push me toward making a graph of the input. Let's see if I regret this. (Ed. note: I didn't regret this.)
 * Day 13: JSON parsing is my friend. So is recursion, though I feel that I haven't got the hang of all the syntactic sugar for different sorts of loops.
+* Day 14: That wasn't so hard, once I got a chance to do it. No real new knowledge, though I might want to go back and make a grid visualization module soon.
 
 ## If you want
 
